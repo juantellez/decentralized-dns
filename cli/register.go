@@ -1,9 +1,11 @@
-package cli
+package main
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	dnsclient "github.com/juantellez/dns-chain/dns_client"
 )
 
 const dataFile = "dns_client/domains.json"
@@ -18,7 +20,7 @@ func main() {
 	owner := os.Args[2]
 	ns := os.Args[3:]
 
-	data := make(map[string]DomainRecord)
+	data := make(map[string]dnsclient.DomainRecord)
 
 	content, err := os.ReadFile(dataFile)
 	if err == nil {
@@ -30,7 +32,7 @@ func main() {
 		return
 	}
 
-	data[domain] = DomainRecord{
+	data[domain] = dnsclient.DomainRecord{
 		Owner: owner,
 		NS:    ns,
 	}

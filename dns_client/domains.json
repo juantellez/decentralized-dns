@@ -1,6 +1,9 @@
 {
-  "example.dns.": {
-    "owner": "base64-public-key",
-    "ns": ["ns1.example.dns.", "ns2.example.dns."]
+  "satoshi.free.": {
+    "owner": "6S/ueWWVUFOCCktHjiQEPNYesKAI8Wp9UeQ0XEsvjGw=",
+    "ns": [
+      "ns1.example.dns.",
+      "ns2.example.dns."
+    ]
   }
 }

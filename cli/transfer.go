@@ -1,9 +1,11 @@
-package cli
+package main
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	dnsclient "github.com/juantellez/dns-chain/dns_client"
 )
 
 const dataFile = "dns_client/domains.json"
@@ -19,10 +21,10 @@ func main() {
 	signature := os.Args[3]
 	message := []byte(os.Args[4])
 
-	data := make(map[string]DomainRecord)
+	data := make(map[string]dnsclient.DomainRecord)
 	content, err := os.ReadFile(dataFile)
 	if err != nil {
-		fmt.Println("[ERROR] Could not read domains.json")
+		fmt.Println("[ERROR] Could not read domains.json:", err)
 		return
 	}
 	_ = json.Unmarshal(content, &data)
@@ -33,14 +35,18 @@ func main() {
 		return
 	}
 
-	// Verificar firma con owner actual
-	valid, err := VerifySignature(rec.Owner, message, signature)
-	if err != nil || !valid {
-		fmt.Println("[ERROR] Invalid signature")
+	// Verificar firma del mensaje con la clave pública actual
+	valid, err := dnsclient.VerifySignature(rec.Owner, message, signature)
+	if err != nil {
+		fmt.Println("[ERROR] Failed to verify signature:", err)
+		return
+	}
+	if !valid {
+		fmt.Println("[ERROR] Invalid signature.")
 		return
 	}
 
-	// Actualizar propietario
+	// Transferir propiedad
 	rec.Owner = newOwner
 	data[domain] = rec
 

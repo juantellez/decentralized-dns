@@ -1,11 +1,15 @@
-package cli
+package main
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
 	"time"
+
+	dnsclient "github.com/juantellez/dns-chain/dns_client"
 )
+
+const dataFile = "dns_client/domains.json"
 
 func main() {
 	if len(os.Args) != 2 {
@@ -14,20 +18,25 @@ func main() {
 	}
 
 	domain := os.Args[1]
+	data := make(map[string]dnsclient.DomainRecord)
 
-	data := make(map[string][]string)
-	content, err := os.ReadFile("dns_client/domains.json")
+	content, err := os.ReadFile(dataFile)
 	if err != nil {
-		fmt.Println("[ERROR] Could not read domains.json")
+		fmt.Println("[ERROR] Could not read domains.json:", err)
 		return
 	}
-	_ = json.Unmarshal(content, &data)
+
+	err = json.Unmarshal(content, &data)
+	if err != nil {
+		fmt.Println("[ERROR] Invalid JSON format:", err)
+		return
+	}
 
 	if _, exists := data[domain]; !exists {
 		fmt.Printf("[ERROR] Domain %s not found.\n", domain)
 		return
 	}
 
-	// MVP: solo imprimimos, en el futuro se guardaría el timestamp
+	// En el futuro: actualizar timestamp en la estructura
 	fmt.Printf("[HEARTBEAT] Domain %s is alive at %s\n", domain, time.Now().UTC().Format(time.RFC3339))
 }
