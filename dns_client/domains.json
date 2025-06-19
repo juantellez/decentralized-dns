@@ -1,0 +1,6 @@
+{
+  "example.dns.": {
+    "owner": "base64-public-key",
+    "ns": ["ns1.example.dns.", "ns2.example.dns."]
+  }
+}
