@@ -8,8 +8,9 @@ import (
 )
 
 type DomainRecord struct {
-	Owner string   `json:"owner"` // base64-encoded public key
-	NS    []string `json:"ns"`
+	Owner      string   `json:"owner"` // base64-encoded public key
+	NS         []string `json:"ns"`
+	Expiration int64    `json:"expiration"`
 }
 
 var blockchainRecords = make(map[string]DomainRecord)

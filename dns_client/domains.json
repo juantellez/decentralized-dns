@@ -1,16 +1,10 @@
 {
-  "satoshi.free.": {
-    "owner": "6S/ueWWVUFOCCktHjiQEPNYesKAI8Wp9UeQ0XEsvjGw=",
-    "ns": [
-      "ns1.example.dns.",
-      "ns2.example.dns."
-    ]
-  },
   "satoshipayments.free.": {
-    "owner": "pkD+OsIMT1yPcf2tLQsO1XHcp7eR+qTtN6/NbL4U4Mc=",
+    "owner": "gEsi80FwpZT1jVwLkSletStwpwjIqDY36Zw5qlPAcx8=",
     "ns": [
       "ns1.example.dns.",
       "ns2.example.dns."
-    ]
+    ],
+    "expiration": 1781887623
   }
 }

@@ -32,11 +32,27 @@ func main() {
 		return
 	}
 
-	if _, exists := data[domain]; !exists {
+	record, exists := data[domain]
+	if !exists {
 		fmt.Printf("[ERROR] Domain %s not found.\n", domain)
 		return
 	}
 
-	// En el futuro: actualizar timestamp en la estructura
-	fmt.Printf("[HEARTBEAT] Domain %s is alive at %s\n", domain, time.Now().UTC().Format(time.RFC3339))
+	// Extiende el tiempo de expiración por un año
+	record.Expiration = time.Now().Add(365 * 24 * time.Hour).Unix()
+	data[domain] = record
+
+	updated, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		fmt.Println("[ERROR] Failed to serialize updated data:", err)
+		return
+	}
+
+	err = os.WriteFile(dataFile, updated, 0644)
+	if err != nil {
+		fmt.Println("[ERROR] Could not write to domains.json:", err)
+		return
+	}
+
+	fmt.Printf("[HEARTBEAT] Domain %s extended until %s\n", domain, time.Unix(record.Expiration, 0).UTC().Format(time.RFC3339))
 }

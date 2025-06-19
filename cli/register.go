@@ -4,11 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
 	dnsclient "github.com/juantellez/dns-chain/dns_client"
 )
 
 const dataFile = "dns_client/domains.json"
+
+func normalizeDomain(domain string) string {
+	if !strings.HasSuffix(domain, ".") {
+		return domain + "."
+	}
+	return domain
+}
 
 func main() {
 	if len(os.Args) < 4 {
@@ -16,7 +25,7 @@ func main() {
 		return
 	}
 
-	domain := os.Args[1]
+	domain := normalizeDomain(os.Args[1])
 	owner := os.Args[2]
 	ns := os.Args[3:]
 
@@ -33,8 +42,9 @@ func main() {
 	}
 
 	data[domain] = dnsclient.DomainRecord{
-		Owner: owner,
-		NS:    ns,
+		Owner:      owner,
+		NS:         ns,
+		Expiration: time.Now().Add(365 * 24 * time.Hour).Unix(),
 	}
 
 	updated, _ := json.MarshalIndent(data, "", "  ")

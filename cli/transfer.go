@@ -4,11 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
 	dnsclient "github.com/juantellez/dns-chain/dns_client"
 )
 
 const dataFile = "dns_client/domains.json"
+
+func normalizeDomain(domain string) string {
+	if !strings.HasSuffix(domain, ".") {
+		return domain + "."
+	}
+	return domain
+}
 
 func main() {
 	if len(os.Args) != 5 {
@@ -16,7 +25,7 @@ func main() {
 		return
 	}
 
-	domain := os.Args[1]
+	domain := normalizeDomain(os.Args[1])
 	newOwner := os.Args[2]
 	signature := os.Args[3]
 	message := []byte(os.Args[4])
@@ -46,8 +55,9 @@ func main() {
 		return
 	}
 
-	// Transferir propiedad
+	// Transferir propiedad y actualizar expiración
 	rec.Owner = newOwner
+	rec.Expiration = time.Now().Add(365 * 24 * time.Hour).Unix()
 	data[domain] = rec
 
 	updated, _ := json.MarshalIndent(data, "", "  ")
