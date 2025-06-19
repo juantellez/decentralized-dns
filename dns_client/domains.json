@@ -5,5 +5,12 @@
       "ns1.example.dns.",
       "ns2.example.dns."
     ]
+  },
+  "satoshipayments.free.": {
+    "owner": "pkD+OsIMT1yPcf2tLQsO1XHcp7eR+qTtN6/NbL4U4Mc=",
+    "ns": [
+      "ns1.example.dns.",
+      "ns2.example.dns."
+    ]
   }
 }

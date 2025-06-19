@@ -20,7 +20,7 @@ func HandleDNSRequest(w dns.ResponseWriter, r *dns.Msg) {
 
 		if reservedTLDs[tld] || !domainInBlockchain(domain) {
 			log.Printf("[INFO] Using fallback resolver for domain: %s", domain)
-			response, err := resolveWithFallback(domain, q.Qtype)
+			response, err := ResolveWithFallback(domain, q.Qtype)
 			if err != nil || response == nil {
 				log.Printf("[ERROR] Fallback resolver failed: %v", err)
 				dns.HandleFailed(w, r)
